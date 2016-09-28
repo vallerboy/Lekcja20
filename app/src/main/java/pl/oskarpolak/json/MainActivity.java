@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +19,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-       new ConnectToWWW().execute();
+
+
+        Intent i = new Intent(this, Main2Activity.class);
+        startActivityForResult(i, 2);
+
+        // Ta metoda uruchamia połączenie z internetem, pobiera źródło i czyta kod JSON.
+      // new ConnectToWWW().execute();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 2 && resultCode == RESULT_OK){
+            Toast.makeText(this, data.getExtras().getString("code"), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void readJSON(String s){
@@ -29,7 +43,15 @@ public class MainActivity extends AppCompatActivity {
             for(int i = 0; i <= rootArray.length()-1; i++){
                 JSONObject object = rootArray.getJSONObject(i);
 
-                Log.e("JSON", object.getString("guid"));
+                  JSONArray friendsArray = object.getJSONArray("friends");
+
+                    for(int o = 0; o < friendsArray.length(); o++) {
+                          JSONObject friendType = friendsArray.getJSONObject(o);
+                           Log.e("Friends", friendType.getString("name"));
+
+
+                    }
+
             }
 
 
@@ -46,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             HttpConnect connect = new HttpConnect();
             String ourWebsite = connect.makeCall("http://www.json-generator.com/api/json/get/bQFBDNeEpu?indent=2");
+            Log.e("JSON", ourWebsite);
             return ourWebsite;
         }
 

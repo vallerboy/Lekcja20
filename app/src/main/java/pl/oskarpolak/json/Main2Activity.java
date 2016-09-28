@@ -11,15 +11,14 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        Intent data = new Intent();
-        data.putExtra("code","test");
-        setResult(RESULT_OK,data);
-       // finish();
 
     }
 
     @Override
     public void onBackPressed() {
-
+        Intent data = new Intent();
+        data.putExtra("code","test");
+        setResult(RESULT_OK,data);
+        finish();
     }
 }
