@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         image = (ImageView) findViewById(R.id.imageView);
 
 
+        // Tutaj uruchamiamy aparat i wykorzystujemy onActivityResult aby przechwycić dane.
+        // Następnie ustawiamy putExtra z parametrem zapisywania zdjęcia
+        // NIE ZAPOMNIJ DODAĆ Permissions.
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePicture, 5);
        try {
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        // Ta metoda uruchamia nam Activity2 w celu  pokazania mozliwości przsyłania informacji
         Intent i = new Intent(this, Main2Activity.class);
        // startActivityForResult(i, 2);
 
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Tworzymy plik do którego będziemy zapisywać nasze zdjęcie
     private File createImageFile() throws IOException {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "AkademiaKodu_"+timestamp;
