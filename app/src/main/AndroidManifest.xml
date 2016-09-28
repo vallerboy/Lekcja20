@@ -3,6 +3,10 @@
     package="pl.oskarpolak.json">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.media.action.IMAGE_CAPTURE"></uses-permission>
+
+
 
     <application
         android:allowBackup="true"

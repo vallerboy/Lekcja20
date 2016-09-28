@@ -1,17 +1,28 @@
 package pl.oskarpolak.json;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
+
+
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +30,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        image = (ImageView) findViewById(R.id.imageView);
+
+
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, 5);
+       try {
+            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, createImageFile().toURI());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         Intent i = new Intent(this, Main2Activity.class);
-        startActivityForResult(i, 2);
+       // startActivityForResult(i, 2);
 
         // Ta metoda uruchamia połączenie z internetem, pobiera źródło i czyta kod JSON.
       // new ConnectToWWW().execute();
@@ -33,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == 2 && resultCode == RESULT_OK){
             Toast.makeText(this, data.getExtras().getString("code"), Toast.LENGTH_LONG).show();
         }
+        if(requestCode == 5 && resultCode == RESULT_OK){
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            image.setImageBitmap(bitmap);
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "AkademiaKodu_"+timestamp;
+        File file = new File(getFilesDir().getAbsoluteFile() + "/" + imageFileName);
+        return file;
     }
 
     private void readJSON(String s){
